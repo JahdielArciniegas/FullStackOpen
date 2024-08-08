@@ -33,14 +33,9 @@ const Part = ({ name, exercises }) => {
 };
 
 const Total = ({ parts }) => {
-  let total = 0;
-  {
-    parts.map((part) => {
-      total += part.exercises;
-      return total;
-    });
-  }
-  return <h4>Number of exercises {total}</h4>;
+  const numArray = parts.map((part) => part.exercises);
+  const total = numArray.reduce((s, p) => s + p);
+  return <h4>Number of {total}</h4>;
 };
 
 const App = () => {
