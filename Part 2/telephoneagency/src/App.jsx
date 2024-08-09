@@ -57,10 +57,10 @@ function App() {
   const [persons, setPersons] = useState([]);
   useEffect(() => {
     axios.get("http://localhost:3001/persons").then((response) => {
-      console.log(response);
       setPersons(response.data);
     });
   }, []);
+
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setFilterName] = useState(false);
@@ -78,9 +78,11 @@ function App() {
       number: newNumber,
     };
 
-    setPersons(persons.concat(personObject));
-    setNewName("");
-    setNewNumber("");
+    axios.post("http://localhost:3001/persons", personObject).then((res) => {
+      setPersons(persons.concat(res.data));
+      setNewName("");
+      setNewNumber("");
+    });
   };
 
   const handleNameChange = (event) => {
