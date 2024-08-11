@@ -42,12 +42,19 @@ const PersonForm = ({
   );
 };
 
-const ShowPersons = ({ namesToShow }) => {
+const ShowPersons = ({ namesToShow, deletePerson }) => {
   return (
     <div>
       <h2>Numbers</h2>
       {namesToShow.map((person) => {
-        return <p key={person.name}>{person.name + " " + person.number}</p>;
+        return (
+          <p key={person.name}>
+            {person.name + " " + person.number}{" "}
+            <button onClick={() => deletePerson(person.id, person.name)}>
+              delete
+            </button>
+          </p>
+        );
       })}
     </div>
   );
@@ -57,7 +64,6 @@ function App() {
   const [persons, setPersons] = useState([]);
   useEffect(() => {
     personService.getAll().then((persons) => {
-      console.log(persons);
       setPersons(persons);
     });
   }, []);
@@ -84,6 +90,11 @@ function App() {
       setNewName("");
       setNewNumber("");
     });
+  };
+
+  const deletePerson = (id, name) => {
+    confirm(`Esta seguro de que quiere eliminar a ${name}`);
+    personService.deletePerson(id);
   };
 
   const handleNameChange = (event) => {
@@ -125,7 +136,7 @@ function App() {
         newNumber={newNumber}
         addNewPerson={addNewPerson}
       />
-      <ShowPersons namesToShow={namesToShow} />
+      <ShowPersons namesToShow={namesToShow} deletePerson={deletePerson} />
     </div>
   );
 }
