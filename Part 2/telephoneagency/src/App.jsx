@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import personService from "./services/persons";
+import "./App.css";
 
 const Filter = ({ findName, handleNameShowChange, handleShowOn }) => {
   return (
@@ -60,6 +61,14 @@ const ShowPersons = ({ namesToShow, deletePerson }) => {
   );
 };
 
+const ShowMessage = ({ messageErr }) => {
+  if (messageErr === 0) {
+    return;
+  } else {
+    return <h1 className="err">{messageErr}</h1>;
+  }
+};
+
 function App() {
   const [persons, setPersons] = useState([]);
   useEffect(() => {
@@ -67,11 +76,11 @@ function App() {
       setPersons(persons);
     });
   }, []);
-
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setFilterName] = useState(false);
   const [findName, setFindName] = useState("");
+  const [messageErr, setMessageErr] = useState(0);
 
   const addNewPerson = (event) => {
     event.preventDefault();
@@ -91,6 +100,8 @@ function App() {
             person.id !== response.id ? person : response
           )
         );
+        const message = `Se ha modificado el numero de ${response.name}`;
+        setMessageErr(message);
         setNewName("");
         setNewNumber("");
       });
@@ -104,6 +115,8 @@ function App() {
 
     personService.create(personObject).then((returnedPerson) => {
       setPersons(persons.concat(returnedPerson));
+      const message = `Se ha agregado a ${returnedPerson.name}`;
+      setMessageErr(message);
       setNewName("");
       setNewNumber("");
     });
@@ -113,6 +126,8 @@ function App() {
     confirm(`Delete ${name}???`);
     personService.deletePerson(id).then((res) => {
       setPersons(persons.filter((person) => person.id !== res.id));
+      const message = `Se ha eliminado el usuario ${res.name}`;
+      setMessageErr(message);
     });
   };
 
@@ -155,9 +170,14 @@ function App() {
         })
       : persons;
 
+  useEffect(() => {
+    messageErr !== 0 ? setTimeout(() => setMessageErr(0), 2000) : messageErr;
+  }, [messageErr]);
+
   return (
     <div>
       <h1>Phonebook</h1>
+      <ShowMessage messageErr={messageErr} />
       <Filter
         handleShowOn={handleShowOn}
         findName={findName}
