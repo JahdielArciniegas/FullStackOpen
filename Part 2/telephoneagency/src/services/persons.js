@@ -12,9 +12,10 @@ const create = newObject => {
 }
 
 const deletePerson = id => {
-  axios.delete(`${baseUrl}/${id}`)
-  const request = axios.get(baseUrl)
-  return request.then(response => response.data)
+  
+  const request = axios.delete(`${baseUrl}/${id}`)
+  
+  return request.then(response => { console.log(response.data.id); return response.data})
 }
 
 export default {getAll , create, deletePerson}

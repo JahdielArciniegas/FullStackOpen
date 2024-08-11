@@ -94,7 +94,9 @@ function App() {
 
   const deletePerson = (id, name) => {
     confirm(`Esta seguro de que quiere eliminar a ${name}`);
-    personService.deletePerson(id);
+    personService.deletePerson(id).then((res) => {
+      setPersons(persons.filter((person) => person.id !== res.id));
+    });
   };
 
   const handleNameChange = (event) => {
