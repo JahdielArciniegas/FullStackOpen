@@ -114,14 +114,29 @@ function App() {
     setFindName(newFindName);
   };
 
-  const namesToShow = filterName
-    ? persons.filter(
-        (person) =>
-          person.name.localeCompare(findName, undefined, {
-            sensitivity: "base",
-          }) === 0
-      )
-    : persons;
+  const namesToShow =
+    filterName && findName !== ""
+      ? persons.filter((person) => {
+          const names = person.name.split(" ");
+          if (names.length === 1) {
+            return (
+              names[0].localeCompare(findName, undefined, {
+                sensitivity: "base",
+              }) === 0
+            );
+          } else if (names.length === 2) {
+            return (
+              names[0].localeCompare(findName, undefined, {
+                sensitivity: "base",
+              }) === 0 ||
+              person.name.localeCompare(findName, undefined, {
+                sensitivity: "base",
+              }) === 0
+            );
+          }
+          return false;
+        })
+      : persons;
 
   return (
     <div>
