@@ -5,3 +5,11 @@
   color: green;
   border: solid 4px green;
 }
+
+.fail{
+  width: 100%;
+  height: auto;
+  background-color: rgb(186, 184, 184);
+  color: red;
+  border: solid 4px red;
+}

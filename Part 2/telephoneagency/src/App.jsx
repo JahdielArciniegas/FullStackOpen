@@ -61,9 +61,12 @@ const ShowPersons = ({ namesToShow, deletePerson }) => {
   );
 };
 
-const ShowMessage = ({ messageErr }) => {
+const ShowMessage = ({ messageErr, error }) => {
   if (messageErr === 0) {
     return;
+  } else if (error === 1) {
+    console.log(error);
+    return <h1 className="fail">{messageErr}</h1>;
   } else {
     return <h1 className="err">{messageErr}</h1>;
   }
@@ -81,6 +84,7 @@ function App() {
   const [filterName, setFilterName] = useState(false);
   const [findName, setFindName] = useState("");
   const [messageErr, setMessageErr] = useState(0);
+  const [error, setError] = useState(0);
 
   const addNewPerson = (event) => {
     event.preventDefault();
@@ -94,17 +98,27 @@ function App() {
         name: newName,
         number: newNumber,
       };
-      personService.updateNumber(person.id, personObject).then((response) => {
-        setPersons(
-          persons.map((person) =>
-            person.id !== response.id ? person : response
-          )
-        );
-        const message = `Se ha modificado el numero de ${response.name}`;
-        setMessageErr(message);
-        setNewName("");
-        setNewNumber("");
-      });
+      personService
+        .updateNumber(person.id, personObject)
+        .then((response) => {
+          setPersons(
+            persons.map((person) =>
+              person.id !== response.id ? person : response
+            )
+          );
+          const message = `Se ha modificado el numero de ${response.name}`;
+          setMessageErr(message);
+        })
+        .catch((err) => {
+          console.log(`Fail , ${err}`);
+          const message = `Informarion of ${person.name} has alrady been removed from server`;
+          setMessageErr(message);
+          setError(1);
+        })
+        .finally(() => {
+          setNewName("");
+          setNewNumber("");
+        });
       return;
     }
 
@@ -174,10 +188,14 @@ function App() {
     messageErr !== 0 ? setTimeout(() => setMessageErr(0), 2000) : messageErr;
   }, [messageErr]);
 
+  useEffect(() => {
+    error !== 0 ? setTimeout(() => setError(0), 2000) : error;
+  }, [error]);
+
   return (
     <div>
       <h1>Phonebook</h1>
-      <ShowMessage messageErr={messageErr} />
+      <ShowMessage messageErr={messageErr} error={error} />
       <Filter
         handleShowOn={handleShowOn}
         findName={findName}
