@@ -5,6 +5,7 @@ const listHelper = require('../utils/list_helper')
 const supertest = require('supertest')
 const Blog = require('../models/blog')
 const app = require('../app')
+const { get } = require('node:http')
 
 const api = supertest(app)
 
@@ -77,7 +78,7 @@ test('Validate field id and not _id', async() => {
   assert.strictEqual(Object.keys(response.body[0]).includes('id'), true)
 })
 
-test.only('Create a blog successful', async() => {
+test('Create a blog successful', async() => {
   const newBlog = {
       title : "The Bitcoin was hacked",
       author : "Liam Hellmann",
@@ -98,6 +99,20 @@ test.only('Create a blog successful', async() => {
   assert.strictEqual(response.body.length, initialBlogs.length + 1)
   assert(titles.includes('The Bitcoin was hacked'))
 
+})
+
+test('Delete a blog successful', async() => {
+  const response = await api.get('/api/blogs')
+  const startList = response.body
+  const deleteBlog = startList[0]
+  await api
+  .delete(`/api/blogs/${deleteBlog.id}`)
+  .expect(204)
+  const response2 = await api.get('/api/blogs')
+  const endList = response2.body
+
+  const titles = endList.map(r => r.title)
+  assert(!titles.includes(deleteBlog.title))
 })
 
 after(async () => {
