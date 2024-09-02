@@ -115,6 +115,19 @@ test('Delete a blog successful', async() => {
   assert(!titles.includes(deleteBlog.title))
 })
 
+test('Update a blog successful', async() => {
+  const response = await api.get('/api/blogs')
+  const startList = response.body
+  const updatedBlog = startList[1]
+  updatedBlog.likes = 41
+  await api.put(`/api/blogs/${updatedBlog.id}`)
+
+  const response2 = await api.get('/api/blogs')
+  const endList = response2.body
+
+  assert.notStrictEqual(startList[1].likes,endList[1].likes)
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
