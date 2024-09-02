@@ -69,9 +69,14 @@ beforeEach(async() => {
   }
 })
 
-test.only('Return list leght correct', async () => {
+test('Return list leght correct', async () => {
   const response = await api.get('/api/blogs')
   assert.strictEqual(response.body.length, initialBlogs.length)
+})
+
+test('Validate field id and not _id', async() => {
+  const response = await api.get('/api/blogs')
+  assert.strictEqual(Object.keys(response.body[0]).includes('id'), true)
 })
 
 after(async () => {
