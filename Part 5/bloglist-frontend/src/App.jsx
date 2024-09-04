@@ -4,6 +4,7 @@ import blogService from "./services/blogs";
 import Login from "./components/Login";
 import loginServies from "./services/login";
 import AddBlog from "./components/AddBlog";
+import ShowNotification from "./components/ShowNotification";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -13,6 +14,8 @@ const App = () => {
   const [newBlogTitle, setNewBlogTitle] = useState("");
   const [newBlogAuthor, setNewBlogAuthor] = useState("");
   const [newBlogUrl, setNewBlogUrl] = useState("");
+  const [notification, setNotification] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -30,6 +33,10 @@ const App = () => {
   const logout = () => {
     localStorage.removeItem("loggedBlogappUser");
     setUser(null);
+    setNotification("Loggout User");
+    setTimeout(() => {
+      setNotification(null);
+    }, 5000);
   };
 
   const handleTitle = ({ target }) => {
@@ -54,19 +61,29 @@ const App = () => {
 
   const addBlog = (event) => {
     event.preventDefault();
-    const blogObject = {
-      title: newBlogTitle,
-      author: newBlogAuthor,
-      url: newBlogUrl,
-      likes: 0,
-    };
 
-    blogService.create(blogObject).then((returnedBlog) => {
-      setBlogs(blogs.concat(returnedBlog));
+    try {
+      const blog = blogService.create({
+        title: newBlogTitle,
+        author: newBlogAuthor,
+        url: newBlogUrl,
+        likes: 0,
+      });
+
+      setBlogs(blogs.concat(blog));
+      setNotification("Added Blog");
       setNewBlogTitle("");
       setNewBlogAuthor("");
       setNewBlogUrl("");
-    });
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+    } catch (error) {
+      setError(error);
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
+    }
   };
 
   const handleLogin = async (event) => {
@@ -82,13 +99,22 @@ const App = () => {
       setUser(user);
       setUsername("");
       setPassword("");
-    } catch (exception) {
-      console.log("Wrong Credentials");
+      setNotification(`Log in correct`);
+      setTimeout(() => {
+        setNotification(null);
+      }, 5000);
+    } catch (error) {
+      setError(error);
+      setTimeout(() => {
+        setError(null);
+      });
     }
   };
   if (user === null) {
     return (
       <>
+        <h3>Log in to application</h3>
+        <ShowNotification notification={notification} error={error} />
         <Login
           username={username}
           password={password}
@@ -102,6 +128,7 @@ const App = () => {
     return (
       <div>
         <h2>Blogs</h2>
+        <ShowNotification notification={notification} error={error} />
         <h4>
           {user.name} logged in <button onClick={logout}>Logout</button>
         </h4>
@@ -113,6 +140,8 @@ const App = () => {
           handleTitle={handleTitle}
           handleUrl={handleUrl}
           addBlog={addBlog}
+          error={error}
+          notification={notification}
         />
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />

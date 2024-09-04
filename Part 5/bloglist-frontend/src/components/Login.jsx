@@ -1,4 +1,5 @@
 import React from "react";
+import ShowNotification from "./ShowNotification";
 
 const Login = ({
   username,
@@ -9,7 +10,6 @@ const Login = ({
 }) => {
   return (
     <div>
-      <h3>Log in to application</h3>
       <form onSubmit={handleLogin}>
         <div>
           <label htmlFor="username">Username </label>
