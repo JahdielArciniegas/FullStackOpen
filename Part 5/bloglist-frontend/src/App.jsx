@@ -16,6 +16,7 @@ const App = () => {
   const [newBlogUrl, setNewBlogUrl] = useState("");
   const [notification, setNotification] = useState(null);
   const [error, setError] = useState(null);
+  const [addNewBlogVisible, setAddNewBlogVisible] = useState(false);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -29,6 +30,10 @@ const App = () => {
       blogService.setToken(user.token);
     }
   }, []);
+
+  const handleVisibleNewBlog = () => {
+    setAddNewBlogVisible(!addNewBlogVisible);
+  };
 
   const logout = () => {
     localStorage.removeItem("loggedBlogappUser");
@@ -142,6 +147,8 @@ const App = () => {
           addBlog={addBlog}
           error={error}
           notification={notification}
+          addNewBlogVisible={addNewBlogVisible}
+          handleVisibleNewBlog={handleVisibleNewBlog}
         />
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
