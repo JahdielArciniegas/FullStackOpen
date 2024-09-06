@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import loginServies from "./services/login";
 import AddBlog from "./components/AddBlog";
 import ShowNotification from "./components/ShowNotification";
+import Togglabe from "./components/Togglabe";
 
 const App = () => {
   const [blogs, setBlogs] = useState([]);
@@ -30,10 +31,6 @@ const App = () => {
       blogService.setToken(user.token);
     }
   }, []);
-
-  const handleVisibleNewBlog = () => {
-    setAddNewBlogVisible(!addNewBlogVisible);
-  };
 
   const logout = () => {
     localStorage.removeItem("loggedBlogappUser");
@@ -137,19 +134,20 @@ const App = () => {
         <h4>
           {user.name} logged in <button onClick={logout}>Logout</button>
         </h4>
-        <AddBlog
-          title={newBlogTitle}
-          author={newBlogAuthor}
-          url={newBlogUrl}
-          handleAuthor={handleAuthor}
-          handleTitle={handleTitle}
-          handleUrl={handleUrl}
-          addBlog={addBlog}
-          error={error}
-          notification={notification}
-          addNewBlogVisible={addNewBlogVisible}
-          handleVisibleNewBlog={handleVisibleNewBlog}
-        />
+        <Togglabe buttonLabel="Create new Blog">
+          <AddBlog
+            title={newBlogTitle}
+            author={newBlogAuthor}
+            url={newBlogUrl}
+            handleAuthor={handleAuthor}
+            handleTitle={handleTitle}
+            handleUrl={handleUrl}
+            addBlog={addBlog}
+            error={error}
+            notification={notification}
+          />
+        </Togglabe>
+
         {blogs.map((blog) => (
           <Blog key={blog.id} blog={blog} />
         ))}
