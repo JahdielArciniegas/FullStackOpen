@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, forwardRef, useImperativeHandle } from "react";
 
-const Togglabe = ({ children, buttonLabel }) => {
+const Togglabe = forwardRef(({ children, buttonLabel }, refs) => {
   const [visible, setVisible] = useState(false);
   const hideWhenVisible = { display: visible ? "none" : "" };
   const showWhenVisible = { display: visible ? "" : "none" };
@@ -8,6 +8,12 @@ const Togglabe = ({ children, buttonLabel }) => {
   const toggleVisibility = () => {
     setVisible(!visible);
   };
+
+  useImperativeHandle(refs, () => {
+    return {
+      toggleVisibility,
+    };
+  });
 
   return (
     <div>
@@ -20,6 +26,6 @@ const Togglabe = ({ children, buttonLabel }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Togglabe;
