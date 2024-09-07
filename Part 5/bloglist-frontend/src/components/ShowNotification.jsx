@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const ShowNotification = ({ notification, error }) => {
   return (
@@ -8,7 +9,11 @@ const ShowNotification = ({ notification, error }) => {
       )}
       {error !== null && <div className="error">{error}</div>}
     </div>
-  );
-};
+  )
+}
 
-export default ShowNotification;
+ShowNotification.propType = {
+  notification : PropTypes.string.isRequired, error : PropTypes.string.isRequired
+}
+
+export default ShowNotification

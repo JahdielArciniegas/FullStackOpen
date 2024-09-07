@@ -1,5 +1,5 @@
-import React from "react";
-import ShowNotification from "./ShowNotification";
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Login = ({
   username,
@@ -36,7 +36,15 @@ const Login = ({
         <button type="submit">Login</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default Login;
+Login.propTypes = {
+  username : PropTypes.string.isRequired,
+  password : PropTypes.string.isRequired,
+  handlePassword: PropTypes.func.isRequired,
+  handleUsername: PropTypes.func.isRequired,
+  handleLogin : PropTypes.func.isRequired,
+}
+
+export default Login

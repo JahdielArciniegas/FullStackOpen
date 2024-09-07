@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const AddBlog = ({
   title,
@@ -46,7 +47,17 @@ const AddBlog = ({
         <button type="submit">Create</button>
       </form>
     </div>
-  );
-};
+  )
+}
 
-export default AddBlog;
+AddBlog.propTypes = {
+  title : PropTypes.string.isRequired,
+  author : PropTypes.string.isRequired,
+  url : PropTypes.string.isRequired,
+  handleTitle: PropTypes.func.isRequired,
+  handleAuthor: PropTypes.func.isRequired,
+  handleUrl: PropTypes.func.isRequired,
+  addBlog : PropTypes.func.isRequired,
+}
+
+export default AddBlog
