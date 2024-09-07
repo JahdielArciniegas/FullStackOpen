@@ -110,6 +110,8 @@ const App = () => {
     }
   };
 
+  blogs.sort((a, b) => b.likes - a.likes);
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
