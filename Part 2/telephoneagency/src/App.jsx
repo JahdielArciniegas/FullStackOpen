@@ -137,12 +137,13 @@ function App() {
   };
 
   const deletePerson = (id, name) => {
-    confirm(`Delete ${name}???`);
-    personService.deletePerson(id).then(() => {
-      setPersons(persons.filter((person) => person.id !== id));
-      const message = `Se ha eliminado el usuario ${name}`;
-      setMessageErr(message);
-    });
+    if (confirm(`Delete ${name}???`)) {
+      personService.deletePerson(id).then(() => {
+        setPersons(persons.filter((person) => person.id !== id));
+        const message = `Se ha eliminado el usuario ${name}`;
+        setMessageErr(message);
+      });
+    }
   };
 
   const handleNameChange = (event) => {

@@ -60,17 +60,17 @@ const App = () => {
     setUsername(target.value);
   };
 
-  const addBlog = (event) => {
+  const addBlog = async (event) => {
     event.preventDefault();
 
     try {
-      const blog = blogService.create({
+      const blog = await blogService.create({
         title: newBlogTitle,
         author: newBlogAuthor,
         url: newBlogUrl,
         likes: 0,
       });
-
+      console.log(blog);
       setBlogs(blogs.concat(blog));
       setNotification("Added Blog");
       setNewBlogTitle("");
@@ -98,6 +98,15 @@ const App = () => {
       setTimeout(() => {
         setError(null);
       }, 5000);
+    }
+  };
+
+  const deleteBlog = (id) => {
+    const blog = blogs.find((b) => b.id === id);
+    if (confirm(`Remove blog You're NOT gonna need it! by ${blog.author}`)) {
+      blogService.deleteBlog(id);
+      setBlogs(blogs.filter((blog) => blog.id !== id));
+      setNotification(`Deleted ${blog.title}`);
     }
   };
 
@@ -162,7 +171,13 @@ const App = () => {
         </Togglabe>
 
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} addLikes={addLikes} />
+          <Blog
+            key={blog.id}
+            blog={blog}
+            addLikes={addLikes}
+            deleteBlog={deleteBlog}
+            user={user}
+          />
         ))}
       </div>
     );

@@ -28,4 +28,10 @@ const update = async (id, newObject) => {
   return response.data
 }
 
-export default { getAll, create, update, setToken }
+const deleteBlog = async (id) => {
+  const request = axios.delete(`${baseUrl}/${id}`)
+  const response = await request
+  return response.data
+}
+
+export default { getAll, create, update, setToken, deleteBlog }
