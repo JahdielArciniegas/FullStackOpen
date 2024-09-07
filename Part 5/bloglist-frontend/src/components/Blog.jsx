@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Togglabe from "./Togglabe";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, addLikes }) => {
   const [visible, setVisible] = useState("false");
 
   const hideWhenVisibleBlog = { display: visible ? "none" : "" };
@@ -28,7 +28,7 @@ const Blog = ({ blog }) => {
       <div style={hideWhenVisibleBlog}>
         <p>{blog.url}</p>
         <p>
-          {blog.likes} <button>like</button>
+          {blog.likes} <button onClick={() => addLikes(blog.id)}>like</button>
         </p>
         <p>{blog.user.name}</p>
         <button onClick={toggleVisibility}>hide</button>

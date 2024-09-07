@@ -17,7 +17,6 @@ const App = () => {
   const [newBlogUrl, setNewBlogUrl] = useState("");
   const [notification, setNotification] = useState(null);
   const [error, setError] = useState(null);
-  const [addNewBlogVisible, setAddNewBlogVisible] = useState(false);
 
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs));
@@ -88,6 +87,20 @@ const App = () => {
     }
   };
 
+  const addLikes = async (id) => {
+    const blog = blogs.find((b) => b.id === id);
+    const changedBlog = { ...blog, likes: blog.likes + 1 };
+    try {
+      const returnedBlog = await blogService.update(id, changedBlog);
+      setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)));
+    } catch (error) {
+      setError("Error adding like to database");
+      setTimeout(() => {
+        setError(null);
+      }, 5000);
+    }
+  };
+
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
@@ -149,7 +162,7 @@ const App = () => {
         </Togglabe>
 
         {blogs.map((blog) => (
-          <Blog key={blog.id} blog={blog} />
+          <Blog key={blog.id} blog={blog} addLikes={addLikes} />
         ))}
       </div>
     );
