@@ -25,7 +25,7 @@ const Blog = ({ blog, addLikes, deleteBlog, user }) => {
       <div style={hideWhenVisibleBlog} className='content-hide'>
         <p>{blog.url}</p>
         <p>
-          {blog.likes} <button onClick={() => addLikes(blog.id)}>Like</button>
+          {blog.likes} <button onClick={() => addLikes(blog.id)} className='like'>Like</button>
         </p>
         <p>{blog.user.name}</p>
         {blog.user.name === user.name && (

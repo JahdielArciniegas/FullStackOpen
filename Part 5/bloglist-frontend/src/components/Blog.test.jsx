@@ -16,7 +16,7 @@ describe('<Blog/>', () => {
     }
   }
 
-  const addLikes = () => console.log('likes')
+  const mockHandler = vi.fn()
   const deleteBlog = () => console.log('delete')
 
   const user = {
@@ -25,7 +25,7 @@ describe('<Blog/>', () => {
 
 
   beforeEach(() => {
-    container = render(<Blog blog={blog} user={user} addLikes={addLikes} deleteBlog={deleteBlog}/>).container
+    container = render(<Blog blog={blog} user={user} addLikes={mockHandler} deleteBlog={deleteBlog}/>).container
   })
 
   test('Title and Author visibles, but url and likes not', async() => {
@@ -43,6 +43,14 @@ describe('<Blog/>', () => {
     const div = container.querySelector('.content-hide')
     expect(div).not.toHaveStyle('display : none')
   } )
+
+  test('calls event handler twice when like button is clicked twice', async() => {
+    const user = userEvent.setup()
+    const likeButton = container.querySelector('.like')
+    await user.click(likeButton)
+    await user.click(likeButton)
+    expect(mockHandler.mock.calls).toHaveLength(2)
+  })
 })
 
 

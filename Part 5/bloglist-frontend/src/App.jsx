@@ -64,13 +64,14 @@ const App = () => {
   const addBlog = async (event) => {
     event.preventDefault()
     blogAddRef.current.toggleVisibility()
+    const NewBlog = {
+      title: newBlogTitle,
+      author: newBlogAuthor,
+      url: newBlogUrl,
+      likes: 0,
+    }
     try {
-      const blog = await blogService.create({
-        title: newBlogTitle,
-        author: newBlogAuthor,
-        url: newBlogUrl,
-        likes: 0,
-      })
+      const blog = await blogService.create(NewBlog)
       console.log(blog)
       setBlogs(blogs.concat(blog))
       setNotification('Added Blog')
