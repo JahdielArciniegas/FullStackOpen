@@ -19,10 +19,10 @@ const Blog = ({ blog, addLikes, deleteBlog, user }) => {
   }
 
   return (
-    <div style={blogStyle}>
+    <div style={blogStyle} className='content-view'>
       {blog.title} - {blog.author}{' '}
       <button onClick={toggleVisibility}>{!visible ? 'Hide' : 'View'}</button>
-      <div style={hideWhenVisibleBlog}>
+      <div style={hideWhenVisibleBlog} className='content-hide'>
         <p>{blog.url}</p>
         <p>
           {blog.likes} <button onClick={() => addLikes(blog.id)}>Like</button>
