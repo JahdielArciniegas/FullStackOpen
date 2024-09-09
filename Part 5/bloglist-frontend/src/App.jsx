@@ -72,7 +72,6 @@ const App = () => {
     }
     try {
       const blog = await blogService.create(NewBlog)
-      console.log(blog)
       setBlogs(blogs.concat(blog))
       setNotification('Added Blog')
       setNewBlogTitle('')
@@ -109,6 +108,9 @@ const App = () => {
       blogService.deleteBlog(id)
       setBlogs(blogs.filter((blog) => blog.id !== id))
       setNotification(`Deleted ${blog.title}`)
+      setTimeout(() => {
+        setError(null)
+      }, 5000)
     }
   }
 
