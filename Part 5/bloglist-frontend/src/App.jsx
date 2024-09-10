@@ -73,15 +73,15 @@ const App = () => {
     try {
       const blog = await blogService.create(NewBlog)
       setBlogs(blogs.concat(blog))
-      setNotification('Added Blog')
       setNewBlogTitle('')
       setNewBlogAuthor('')
       setNewBlogUrl('')
+      setNotification('Added Blog')
       setTimeout(() => {
         setNotification(null)
       }, 5000)
     } catch (error) {
-      setError(error)
+      setError('Problem with adding Blog')
       setTimeout(() => {
         setError(null)
       }, 5000)

@@ -20,6 +20,7 @@ const AddBlog = ({
             type="text"
             id="title"
             name="Title"
+            data-testid='title'
             value={title}
             onChange={handleTitle}
           />
@@ -30,6 +31,7 @@ const AddBlog = ({
             type="text"
             id="author"
             name="Author"
+            data-testid='author'
             value={author}
             onChange={handleAuthor}
           />
@@ -40,6 +42,7 @@ const AddBlog = ({
             type="text"
             id="url"
             name="Url"
+            data-testid='url'
             value={url}
             onChange={handleUrl}
           />
