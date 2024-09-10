@@ -15,6 +15,7 @@ const Login = ({
           <label htmlFor="username">Username </label>
           <input
             type="text"
+            data-testid='username'
             id="username"
             placeholder="Insert you username"
             value={username}
@@ -27,6 +28,7 @@ const Login = ({
           <input
             type="password"
             id="password"
+            data-testid='password'
             placeholder="Insert you password"
             value={password}
             name="Password"

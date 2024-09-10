@@ -5,7 +5,7 @@
   "scripts": {
     "test": "cross-env NODE_ENV=test node --test",
     "start": "cross-env NODE_ENV=production node index --watch",
-    "start:test": "NODE_ENV=test node index.js"
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "keywords": [],
   "author": "",

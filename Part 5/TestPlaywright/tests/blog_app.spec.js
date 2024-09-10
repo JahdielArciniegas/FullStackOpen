@@ -1,7 +1,15 @@
 const {test, expect, beforeEach, describe} = require("@playwright/test")
 
 describe('Blog app', () => {
-  beforeEach(async ({ page }) => {
+  beforeEach(async ({ page, request }) => {
+    await request.post('http:localhost:3003/api/testing/reset')
+    await request.post('http://localhost:3003/api/users', {
+      data: {
+        name : 'Matti Luukkainen',
+        username : 'mluukkai',
+        password : 'salainen'
+      }
+    })
     await page.goto('http://localhost:5173')
   })
 
@@ -12,5 +20,26 @@ describe('Blog app', () => {
     await expect(form).toBeVisible()
     await expect(input_name).toBeVisible()
     await expect(input_password).toBeVisible()
+  })
+
+  describe('Login', () => {
+    test('succeds with correct credentials', async({page}) => {
+
+      await page.getByTestId('username').fill('mluukkai')
+      await page.getByTestId('password').fill('salainen')
+
+      await page.getByRole('button', { name: 'Login' }).click()
+
+      await expect(page.getByText('Matti Luukkainen logged in')).toBeVisible()
+    })
+
+    test('fails with wrong credentials', async({page}) => {
+      await page.getByTestId('username').fill('mluukkai')
+      await page.getByTestId('password').fill('salada')
+
+      await page.getByRole('button', { name: 'Login' }).click()
+
+      await expect(page.getByText('Username or Password is incorrect.')).toBeVisible()
+    })
   })
 })

@@ -134,10 +134,10 @@ const App = () => {
         setNotification(null)
       }, 5000)
     } catch (error) {
-      setError(error)
+      setError('Username or password is incorrect.')
       setTimeout(() => {
         setError(null)
-      })
+      },5000)
     }
   }
   if (user === null) {
@@ -160,8 +160,9 @@ const App = () => {
         <h2>Blogs</h2>
         <ShowNotification notification={notification} error={error} />
         <h4>
-          {user.name} logged in <button onClick={logout}>Logout</button>
+          {user.name} logged in
         </h4>
+        <button onClick={logout}>Logout</button>
         <Togglabe buttonLabel="Create new Blog" ref={blogAddRef}>
           <AddBlog
             title={newBlogTitle}
