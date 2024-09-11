@@ -69,7 +69,7 @@ describe('Blog app', () => {
     
 
     describe('When there is a blog', () => {
-      beforeEach(async ({page}) => {
+    beforeEach(async ({page}) => {
       await page.getByRole("button", {name : 'Create new Blog'}).click()
       await page.getByTestId('title').fill('ka')
       await page.getByTestId('author').fill('marc')
@@ -109,20 +109,21 @@ describe('Blog app', () => {
     })
 
     test('blogs should be sorted by likes in descending order', async({page}) => {
-
       await page.getByRole("button", {name : 'Create new Blog'}).click()
       await page.getByTestId('title').fill('hello')
       await page.getByTestId('author').fill('marco')
       await page.getByTestId('url').fill('.com')
       await page.getByRole('button', {name: "Create"}).click()
       await page.getByRole('button', {name: "View"}).click()
-      const button = await page.getByRole('button', {name: 'like'}).last()
-      await button.click()
-      await button.click()
+      await page.getByRole('button', {name : "like"}).click()
+      await page.getByRole("button", {name : 'Create new Blog'}).click()
+      await page.getByTestId('title').fill('ka')
+      await page.getByTestId('author').fill('marc')
+      await page.getByTestId('url').fill('.net')
+      await page.getByRole('button', {name: "Create"}).click()
 
       const blogs = await page.$$eval('.blog', blogs => blogs.map(blog => blog.textContent));
       expect(blogs[0]).toContain('hello - marco');
-      
     })
   })
 })

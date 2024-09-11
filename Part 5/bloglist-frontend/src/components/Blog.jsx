@@ -21,7 +21,7 @@ const Blog = ({ blog, addLikes, deleteBlog, user }) => {
   return (
     <div style={blogStyle} className='content-view blog'>
       <p>{blog.title} - {blog.author}</p>
-      <button onClick={toggleVisibility}>{!visible ? 'Hide' : 'View'}</button>
+      <button onClick={toggleVisibility} data-testid={`${blog.title}`}>{!visible ? 'Hide' : 'View'}</button>
       <div style={hideWhenVisibleBlog} className='content-hide'>
         <p>{blog.url}</p>
         <p>
