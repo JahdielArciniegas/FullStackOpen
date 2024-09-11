@@ -10,6 +10,13 @@ describe('Blog app', () => {
         password : 'salainen'
       }
     })
+    await request.post('http://localhost:3003/api/users', {
+      data: {
+        name : 'Arto Hellas',
+        username : 'hellas',
+        password : 'artoHello'
+      }
+    })
     await page.goto('http://localhost:5173')
   })
 
@@ -61,7 +68,7 @@ describe('Blog app', () => {
     })
     
 
-    describe('When there are notes recorded', () => {
+    describe('When there is a blog', () => {
       beforeEach(async ({page}) => {
       await page.getByRole("button", {name : 'Create new Blog'}).click()
       await page.getByTestId('title').fill('ka')
@@ -71,7 +78,6 @@ describe('Blog app', () => {
     })
 
     test('a blog can be liked', async({page}) => {
-      
       await page.getByRole('button', {name: "View"}).click()
       await page.getByRole('button', {name: "Like"}).click()
       await expect(page.getByText('1')).toBeVisible()
@@ -80,7 +86,6 @@ describe('Blog app', () => {
     test('the user who created a blog can delete it', async({ page }) => {
 
       await page.getByRole('button', {name: "View"}).click()
-      // await page.getByRole('button', { name: "Remove"}).click()
 
       page.once('dialog', async dialog => {
         expect(dialog.type()).toContain('confirm')
@@ -89,9 +94,20 @@ describe('Blog app', () => {
       })
 
       await page.getByRole('button', { name: "Remove" }).click()
-
-      await expect(page.getByText('Delete ka')).toBeVisible
       await expect(page.getByText('ka - marc')).not.toBeVisible()
+    })
+
+    test('Only the creator can see the remove button', async({page}) => {
+      await page.getByRole('button', {name: "view"}).click()
+      await expect(page.getByRole('button',{name: 'Remove'})).toBeVisible()
+
+      await page.getByRole('button', { name: 'Logout'}).click()
+      await page.getByTestId('username').fill('hellas')
+      await page.getByTestId('password').fill('artoHello')
+      await page.getByRole('button', {name : 'Login'}).click()
+
+      await page.getByRole('button', {name: "View"}).click()
+      await expect(page.getByRole('button', {name: 'Remove'})).not.toBeVisible()
     })
     })
   })
