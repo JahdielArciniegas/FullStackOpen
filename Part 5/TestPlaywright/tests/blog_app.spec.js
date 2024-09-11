@@ -75,17 +75,15 @@ describe('Blog app', () => {
       await page.getByTestId('author').fill('marc')
       await page.getByTestId('url').fill('.net')
       await page.getByRole('button', {name: "Create"}).click()
+      await page.getByRole('button', {name: "View"}).click()
     })
 
     test('a blog can be liked', async({page}) => {
-      await page.getByRole('button', {name: "View"}).click()
       await page.getByRole('button', {name: "Like"}).click()
       await expect(page.getByText('1')).toBeVisible()
     })
 
     test('the user who created a blog can delete it', async({ page }) => {
-
-      await page.getByRole('button', {name: "View"}).click()
 
       page.once('dialog', async dialog => {
         expect(dialog.type()).toContain('confirm')
@@ -98,7 +96,6 @@ describe('Blog app', () => {
     })
 
     test('Only the creator can see the remove button', async({page}) => {
-      await page.getByRole('button', {name: "view"}).click()
       await expect(page.getByRole('button',{name: 'Remove'})).toBeVisible()
 
       await page.getByRole('button', { name: 'Logout'}).click()
@@ -109,6 +106,23 @@ describe('Blog app', () => {
       await page.getByRole('button', {name: "View"}).click()
       await expect(page.getByRole('button', {name: 'Remove'})).not.toBeVisible()
     })
+    })
+
+    test('blogs should be sorted by likes in descending order', async({page}) => {
+
+      await page.getByRole("button", {name : 'Create new Blog'}).click()
+      await page.getByTestId('title').fill('hello')
+      await page.getByTestId('author').fill('marco')
+      await page.getByTestId('url').fill('.com')
+      await page.getByRole('button', {name: "Create"}).click()
+      await page.getByRole('button', {name: "View"}).click()
+      const button = await page.getByRole('button', {name: 'like'}).last()
+      await button.click()
+      await button.click()
+
+      const blogs = await page.$$eval('.blog', blogs => blogs.map(blog => blog.textContent));
+      expect(blogs[0]).toContain('hello - marco');
+      
     })
   })
 })

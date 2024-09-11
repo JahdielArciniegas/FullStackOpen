@@ -20,8 +20,12 @@ const App = () => {
   const blogAddRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
+    blogService.getAll().then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
   }, [])
+
+  useEffect(() => {
+    setBlogs(blogs.sort((a, b) => b.likes - a.likes))
+  },[blogs])
 
   useEffect(() => {
     const loggedUser = localStorage.getItem('loggedBlogappUser')
@@ -114,7 +118,6 @@ const App = () => {
     }
   }
 
-  blogs.sort((a, b) => b.likes - a.likes)
 
   const handleLogin = async (event) => {
     event.preventDefault()
