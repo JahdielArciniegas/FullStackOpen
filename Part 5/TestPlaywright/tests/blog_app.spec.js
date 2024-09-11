@@ -59,16 +59,40 @@ describe('Blog app', () => {
       await page.getByRole('button', {name: "Create"}).click()
       await expect(page.getByText('hello - marco')).toBeVisible()
     })
+    
 
-    test('a blog can be liked', async({page}) => {
+    describe('When there are notes recorded', () => {
+      beforeEach(async ({page}) => {
       await page.getByRole("button", {name : 'Create new Blog'}).click()
       await page.getByTestId('title').fill('ka')
       await page.getByTestId('author').fill('marc')
       await page.getByTestId('url').fill('.net')
       await page.getByRole('button', {name: "Create"}).click()
+    })
+
+    test('a blog can be liked', async({page}) => {
+      
       await page.getByRole('button', {name: "View"}).click()
       await page.getByRole('button', {name: "Like"}).click()
       await expect(page.getByText('1')).toBeVisible()
+    })
+
+    test('the user who created a blog can delete it', async({ page }) => {
+
+      await page.getByRole('button', {name: "View"}).click()
+      // await page.getByRole('button', { name: "Remove"}).click()
+
+      page.once('dialog', async dialog => {
+        expect(dialog.type()).toContain('confirm')
+        expect(dialog.message()).toContain("Remove blog You're NOT gonna need it! by marc")
+        await dialog.accept()
+      })
+
+      await page.getByRole('button', { name: "Remove" }).click()
+
+      await expect(page.getByText('Delete ka')).toBeVisible
+      await expect(page.getByText('ka - marc')).not.toBeVisible()
+    })
     })
   })
 })
