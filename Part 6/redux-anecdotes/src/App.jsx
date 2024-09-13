@@ -1,8 +1,14 @@
+import { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 const App = () => {
   const anecdotes = useSelector(state => state)
   const dispatch = useDispatch()
+  const [sortAnecdotes, setSortAnecdotes] = useState([])
+
+  useEffect(() => {
+    setSortAnecdotes(anecdotes.sort((a,b) => b.votes - a.votes))
+  },[anecdotes])
 
   const generateId = () =>
     Number((Math.random() * 1000000).toFixed(0))
@@ -39,7 +45,7 @@ const App = () => {
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {sortAnecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
