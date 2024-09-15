@@ -9,7 +9,11 @@ const notification = createSlice({
     showNotification(state,action){
       const content = action.payload
       return content
+    },
+    cleanNotification(state,action){
+      return action.payload
     }
+
   }
 })
 
