@@ -22,6 +22,8 @@ const createNotification = (state , action) => {
       return `you created '${action.payload}'`
     case "CLEAR" : 
       return ''
+    case "ERROR" :
+      return `Content Length has to more of 5 characters`
     default:
       return state
   }

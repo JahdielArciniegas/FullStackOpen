@@ -10,7 +10,6 @@ const AnecdoteForm = () => {
     mutationFn : createAnecdote,
     onSuccess:(newAnecdote) => {
     const anecdotes = queryClient.getQueryData(['anecdotes'])
-    console.log(anecdotes)
     queryClient.setQueryData(['anecdotes'], anecdotes.concat(newAnecdote))
   }, 
   })
@@ -19,6 +18,13 @@ const AnecdoteForm = () => {
     event.preventDefault()
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
+    if(content.length < 5){
+      dispatch({type : 'ERROR'})
+      setTimeout(() => {
+        dispatch({type : 'CLEAR'})
+      }, 2000)
+      return
+    }
     newAnecdoteMutation.mutate({content, votes : 0})
     dispatch({type : 'CREATE', payload : content})
     setTimeout(() => {
