@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import {BrowserRouter as Router, Routes, Route, Link, useParams} from 'react-router-dom'
+import {BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate} from 'react-router-dom'
 
 const Menu = () => {
   const padding = {
@@ -45,20 +45,24 @@ const Footer = () => (
   </div>
 )
 
-const CreateNew = (props) => {
+const CreateNew = ({addNew, handleNotification}) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
+  const navigate = useNavigate()
 
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    props.addNew({
+    addNew({
       content,
       author,
       info,
       votes: 0
     })
+    const value = `a new anecdote ${content} create`
+    handleNotification(value)
+    navigate('/')
   }
 
   return (
@@ -97,6 +101,10 @@ const Anecdote = ({anecdotes}) => {
   )
 }
 
+const Notification = ({notification}) => {
+  return <p>{notification}</p>
+}
+
 const App = () => {
   const [anecdotes, setAnecdotes] = useState([
     {
@@ -122,18 +130,22 @@ const App = () => {
     setAnecdotes(anecdotes.concat(anecdote))
   }
 
-  const anecdoteById = (id) =>
-    anecdotes.find(a => a.id === id)
+  // const anecdoteById = (id) =>
+  //   anecdotes.find(a => a.id === id)
 
-  const vote = (id) => {
-    const anecdote = anecdoteById(id)
+  // const vote = (id) => {
+  //   const anecdote = anecdoteById(id)
 
-    const voted = {
-      ...anecdote,
-      votes: anecdote.votes + 1
-    }
+  //   const voted = {
+  //     ...anecdote,
+  //     votes: anecdote.votes + 1
+  //   }
 
-    setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
+  //   setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
+  // }
+
+  const handleNotification = (value) => {
+    setNotification(value)
   }
 
   return (
@@ -141,11 +153,12 @@ const App = () => {
       <Router>
         <h1>Software anecdotes</h1>
       <Menu />
+      <Notification notification={notification}/>
       <Routes>
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path='/about' element={<About />} />
         <Route path='/anecdotes/:id' element={<Anecdote anecdotes={anecdotes}/>}/>
-        <Route path='/create' element={<CreateNew addNew={addNew} />} />
+        <Route path='/create' element={<CreateNew addNew={addNew} handleNotification={handleNotification}/>} />
       </Routes>
       
       <Footer />
