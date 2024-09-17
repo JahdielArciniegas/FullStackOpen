@@ -48,8 +48,14 @@ const Footer = () => (
 
 const CreateNew = ({addNew, handleNotification}) => {
   const content = useField('text')
+  // eslint-disable-next-line no-unused-vars
+  const {reset : resetA, ...contentInput} = content
   const author = useField('text')
+  // eslint-disable-next-line no-unused-vars
+  const {reset : resetB, ...authorInput} = author
   const info = useField('text')
+  // eslint-disable-next-line no-unused-vars
+  const {reset : resetC, ...infoInput} = info
   const navigate = useNavigate()
 
 
@@ -80,15 +86,15 @@ const CreateNew = ({addNew, handleNotification}) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input  {...content}/>
+          <input  {...contentInput}/>
         </div>
         <div>
           author
-          <input {...author} />
+          <input {...authorInput} />
         </div>
         <div>
           url for more info
-          <input {...info} />
+          <input {...infoInput} />
         </div>
         <button>create</button>
         <button type='reset' onClick={handleReset}>reset</button>
