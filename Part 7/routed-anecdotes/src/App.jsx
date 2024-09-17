@@ -54,6 +54,7 @@ const CreateNew = ({addNew, handleNotification}) => {
 
 
   const handleSubmit = (e) => {
+    console.log(e)
     e.preventDefault()
     addNew({
       content : content.value,
@@ -65,6 +66,12 @@ const CreateNew = ({addNew, handleNotification}) => {
     handleNotification(value)
     console.log(content.value)
     navigate('/')
+  }
+
+  const handleReset = () => {
+    content.reset()
+    author.reset()
+    info.reset()
   }
 
   return (
@@ -84,6 +91,7 @@ const CreateNew = ({addNew, handleNotification}) => {
           <input {...info} />
         </div>
         <button>create</button>
+        <button type='reset' onClick={handleReset}>reset</button>
       </form>
     </div>
   )
