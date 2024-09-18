@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
 import { addNewLike, createBlog, deleteBlog, initializeBlogs } from './reducers/blogReducer'
 import { logIn, logOut } from './reducers/userReducer'
+import Users from './components/Users'
+import { initializeUsers } from './reducers/usersReducer'
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
@@ -24,6 +26,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
+    dispatch(initializeUsers())
   },[dispatch])
 
   useEffect(() => {
@@ -140,6 +143,7 @@ const App = () => {
         <h4>
           {user.name} logged in
         </h4>
+        <Users/>
         <button onClick={logout}>Logout</button>
         <Togglabe buttonLabel="Create new Blog" ref={blogAddRef}>
           <AddBlog
