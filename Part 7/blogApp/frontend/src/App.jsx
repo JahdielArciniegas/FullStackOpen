@@ -12,6 +12,8 @@ import { addNewLike, createBlog, deleteBlog, initializeBlogs } from './reducers/
 import { logIn, logOut } from './reducers/userReducer'
 import Users from './components/Users'
 import { initializeUsers } from './reducers/usersReducer'
+import { BrowserRouter as Router,Routes,Route } from 'react-router-dom'
+import User from './components/User'
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
@@ -137,35 +139,39 @@ const App = () => {
     )
   } else {
     return (
-      <div>
+      <Router>
         <h2>Blogs</h2>
         <ShowNotification/>
         <h4>
           {user.name} logged in
         </h4>
-        <Users/>
         <button onClick={logout}>Logout</button>
-        <Togglabe buttonLabel="Create new Blog" ref={blogAddRef}>
-          <AddBlog
-            title={newBlogTitle}
-            author={newBlogAuthor}
-            url={newBlogUrl}
-            handleAuthor={handleAuthor}
-            handleTitle={handleTitle}
-            handleUrl={handleUrl}
-            addBlog={addBlog}
-          />
-        </Togglabe>
+        <Routes>
+          <Route path='/users' element={<Users/>}/>
+          <Route path='/' element={<div><Togglabe buttonLabel="Create new Blog" ref={blogAddRef}>
+            <AddBlog
+              title={newBlogTitle}
+              author={newBlogAuthor}
+              url={newBlogUrl}
+              handleAuthor={handleAuthor}
+              handleTitle={handleTitle}
+              handleUrl={handleUrl}
+              addBlog={addBlog}
+            />
+          </Togglabe>
+          {blogs.map((blog) => (
+            <Blog
+              key={blog.id}
+              blog={blog}
+              addLikes={addLikes}
+              deleteBlog={deleteBlogs}
+            />
+          ))}
+          </div>}/>
+          <Route path='/users/:id' element={<User/>}/>
+        </Routes>
 
-        {blogs.map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            addLikes={addLikes}
-            deleteBlog={deleteBlogs}
-          />
-        ))}
-      </div>
+      </Router>
     )
   }
 }
