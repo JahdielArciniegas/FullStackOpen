@@ -8,7 +8,7 @@ import ShowNotification from './components/ShowNotification'
 import Togglabe from './components/Togglabe'
 import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
-import { createBlog, initializeBlogs } from './reducers/blogReducer'
+import { addNewLike, createBlog, deleteBlog, initializeBlogs } from './reducers/blogReducer'
 import { logIn, logOut } from './reducers/userReducer'
 
 const App = () => {
@@ -24,11 +24,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeBlogs())
-  },[])
-
-  // useEffect(() => {
-  //   setBlogs(blogs.sort((a, b) => b.likes - a.likes))
-  // },[blogs])
+  },[dispatch])
 
   useEffect(() => {
     const loggedUser = localStorage.getItem('loggedBlogappUser')
@@ -37,7 +33,7 @@ const App = () => {
       dispatch(logIn(user))
       blogService.setToken(user.token)
     }
-  }, [])
+  }, [dispatch])
 
   const logout = () => {
     localStorage.removeItem('loggedBlogappUser')
@@ -89,18 +85,16 @@ const App = () => {
     const blog = blogs.find((b) => b.id === id)
     const changedBlog = { ...blog, likes: blog.likes + 1 }
     try {
-      const returnedBlog = await blogService.update(id, changedBlog)
-      setBlogs(blogs.map((blog) => (blog.id !== id ? blog : returnedBlog)))
+      dispatch(addNewLike(id, changedBlog))
     } catch (error) {
       dispatch(setNotification('Error adding like to database',2))
     }
   }
 
-  const deleteBlog = (id) => {
+  const deleteBlogs = (id) => {
     const blog = blogs.find((b) => b.id === id)
     if (confirm(`Remove blog You're NOT gonna need it! by ${blog.author}`)) {
-      blogService.deleteBlog(id)
-      (setBlogs(blogs.filter((blog) => blog.id !== id)))
+      dispatch(deleteBlog(id))
       dispatch(setNotification(`Deleted ${blog.title}`,2))
     }
   }
@@ -164,7 +158,7 @@ const App = () => {
             key={blog.id}
             blog={blog}
             addLikes={addLikes}
-            deleteBlog={deleteBlog}
+            deleteBlog={deleteBlogs}
           />
         ))}
       </div>
