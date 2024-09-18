@@ -6,40 +6,42 @@ import loginServies from './services/login'
 import AddBlog from './components/AddBlog'
 import ShowNotification from './components/ShowNotification'
 import Togglabe from './components/Togglabe'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from './reducers/notificationReducer'
+import { createBlog, initializeBlogs } from './reducers/blogReducer'
+import { logIn, logOut } from './reducers/userReducer'
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const blogs = useSelector(state => state.blogs)
   const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  const user = useSelector(state => state.user)
   const [newBlogTitle, setNewBlogTitle] = useState('')
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
   const [newBlogUrl, setNewBlogUrl] = useState('')
   const blogAddRef = useRef()
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs.sort((a, b) => b.likes - a.likes)))
-  }, [])
+    dispatch(initializeBlogs())
+  },[])
 
-  useEffect(() => {
-    setBlogs(blogs.sort((a, b) => b.likes - a.likes))
-  },[blogs])
+  // useEffect(() => {
+  //   setBlogs(blogs.sort((a, b) => b.likes - a.likes))
+  // },[blogs])
 
   useEffect(() => {
     const loggedUser = localStorage.getItem('loggedBlogappUser')
     if (loggedUser) {
       const user = JSON.parse(loggedUser)
-      setUser(user)
+      dispatch(logIn(user))
       blogService.setToken(user.token)
     }
   }, [])
 
   const logout = () => {
     localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
+    dispatch(logOut(null))
     dispatch(setNotification('Loggout User',2))
   }
 
@@ -66,15 +68,14 @@ const App = () => {
   const addBlog = async (event) => {
     event.preventDefault()
     blogAddRef.current.toggleVisibility()
-    const NewBlog = {
+    const newBlog = {
       title: newBlogTitle,
       author: newBlogAuthor,
       url: newBlogUrl,
       likes: 0,
     }
     try {
-      const blog = await blogService.create(NewBlog)
-      setBlogs(blogs.concat(blog))
+      dispatch(createBlog(newBlog))
       setNewBlogTitle('')
       setNewBlogAuthor('')
       setNewBlogUrl('')
@@ -99,7 +100,7 @@ const App = () => {
     const blog = blogs.find((b) => b.id === id)
     if (confirm(`Remove blog You're NOT gonna need it! by ${blog.author}`)) {
       blogService.deleteBlog(id)
-      setBlogs(blogs.filter((blog) => blog.id !== id))
+      (setBlogs(blogs.filter((blog) => blog.id !== id)))
       dispatch(setNotification(`Deleted ${blog.title}`,2))
     }
   }
@@ -115,7 +116,7 @@ const App = () => {
 
       localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      setUser(user)
+      dispatch(logIn(user))
       setUsername('')
       setPassword('')
       dispatch(setNotification('Log in correct',2))
@@ -164,7 +165,6 @@ const App = () => {
             blog={blog}
             addLikes={addLikes}
             deleteBlog={deleteBlog}
-            user={user}
           />
         ))}
       </div>

@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
 
-const Blog = ({ blog, addLikes, deleteBlog, user }) => {
+const Blog = ({ blog, addLikes, deleteBlog }) => {
   const [visible, setVisible] = useState(true)
-
+  const user = useSelector(state => state.user)
   const hideWhenVisibleBlog = { display: visible ? 'none' : '' }
+
 
   const toggleVisibility = () => {
     setVisible(!visible)
@@ -40,7 +42,6 @@ Blog.propTypes = {
   blog : PropTypes.object.isRequired,
   addLikes : PropTypes.func.isRequired,
   deleteBlog : PropTypes.func.isRequired,
-  user : PropTypes.object.isRequired,
 }
 
 export default Blog
