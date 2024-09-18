@@ -14,6 +14,7 @@ import Users from './components/Users'
 import { initializeUsers } from './reducers/usersReducer'
 import { BrowserRouter as Router,Routes,Route } from 'react-router-dom'
 import User from './components/User'
+import OneBlog from './components/OneBlog'
 
 const App = () => {
   const blogs = useSelector(state => state.blogs)
@@ -86,15 +87,7 @@ const App = () => {
     }
   }
 
-  const addLikes = async (id) => {
-    const blog = blogs.find((b) => b.id === id)
-    const changedBlog = { ...blog, likes: blog.likes + 1 }
-    try {
-      dispatch(addNewLike(id, changedBlog))
-    } catch (error) {
-      dispatch(setNotification('Error adding like to database',2))
-    }
-  }
+
 
   const deleteBlogs = (id) => {
     const blog = blogs.find((b) => b.id === id)
@@ -163,11 +156,10 @@ const App = () => {
             <Blog
               key={blog.id}
               blog={blog}
-              addLikes={addLikes}
-              deleteBlog={deleteBlogs}
             />
           ))}
           </div>}/>
+          <Route path='/blog/:id' element={<OneBlog/>}/>
           <Route path='/users/:id' element={<User/>}/>
         </Routes>
 
