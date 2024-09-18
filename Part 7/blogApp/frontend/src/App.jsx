@@ -12,7 +12,7 @@ import { addNewLike, createBlog, deleteBlog, initializeBlogs } from './reducers/
 import { logIn, logOut } from './reducers/userReducer'
 import Users from './components/Users'
 import { initializeUsers } from './reducers/usersReducer'
-import { BrowserRouter as Router,Routes,Route } from 'react-router-dom'
+import { BrowserRouter as Router,Routes,Route, Link } from 'react-router-dom'
 import User from './components/User'
 import OneBlog from './components/OneBlog'
 
@@ -26,6 +26,9 @@ const App = () => {
   const [newBlogAuthor, setNewBlogAuthor] = useState('')
   const [newBlogUrl, setNewBlogUrl] = useState('')
   const blogAddRef = useRef()
+  const padding = {
+    paddingRight: 5
+  }
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -133,12 +136,13 @@ const App = () => {
   } else {
     return (
       <Router>
+        <nav>
+          <Link to='/' style={padding}>Blogs</Link>
+          <Link to='/users' style={padding}>Users</Link>
+          <strong>{user.name}</strong> logged in <button onClick={logout}>Logout</button>
+        </nav>
         <h2>Blogs</h2>
         <ShowNotification/>
-        <h4>
-          {user.name} logged in
-        </h4>
-        <button onClick={logout}>Logout</button>
         <Routes>
           <Route path='/users' element={<Users/>}/>
           <Route path='/' element={<div><Togglabe buttonLabel="Create new Blog" ref={blogAddRef}>
