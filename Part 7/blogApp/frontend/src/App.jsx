@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
+import Nav from 'react-bootstrap/Nav'
+import Button from 'react-bootstrap/Button'
+import Navbar from 'react-bootstrap/Navbar'
 import Blog from './components/Blog'
 import blogService from './services/blogs'
 import Login from './components/Login'
@@ -27,7 +30,9 @@ const App = () => {
   const [newBlogUrl, setNewBlogUrl] = useState('')
   const blogAddRef = useRef()
   const padding = {
-    paddingRight: 5
+    paddingRight: 5,
+    textDecoration: 'none',
+    color: '#aaa'
   }
 
   useEffect(() => {
@@ -135,39 +140,52 @@ const App = () => {
     )
   } else {
     return (
-      <Router>
-        <nav>
-          <Link to='/' style={padding}>Blogs</Link>
-          <Link to='/users' style={padding}>Users</Link>
-          <strong>{user.name}</strong> logged in <button onClick={logout}>Logout</button>
-        </nav>
-        <h2>Blogs</h2>
-        <ShowNotification/>
-        <Routes>
-          <Route path='/users' element={<Users/>}/>
-          <Route path='/' element={<div><Togglabe buttonLabel="Create new Blog" ref={blogAddRef}>
-            <AddBlog
-              title={newBlogTitle}
-              author={newBlogAuthor}
-              url={newBlogUrl}
-              handleAuthor={handleAuthor}
-              handleTitle={handleTitle}
-              handleUrl={handleUrl}
-              addBlog={addBlog}
-            />
-          </Togglabe>
-          {blogs.map((blog) => (
-            <Blog
-              key={blog.id}
-              blog={blog}
-            />
-          ))}
-          </div>}/>
-          <Route path='/blog/:id' element={<OneBlog/>}/>
-          <Route path='/users/:id' element={<User/>}/>
-        </Routes>
+      <div className='container'>
+        <Router>
+          <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+            <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+            <Navbar.Collapse id="responsive-navbar-nav">
+              <Nav>
+                <Nav.Link>
+                  <Link to='/' style={padding}>Blogs</Link>
+                </Nav.Link>
+                <Nav.Link>
+                  <Link to='/users' style={padding}>Users</Link>
+                </Nav.Link>
+                <Nav.Link>
+                  <strong>{user.name}</strong> logged in <button onClick={logout}>Logout</button>
+                </Nav.Link>
+              </Nav>
+            </Navbar.Collapse>
+          </Navbar>
+          <h2>Blogs</h2>
+          <ShowNotification/>
+          <Routes>
+            <Route path='/users' element={<Users/>}/>
+            <Route path='/' element={<div><Togglabe buttonLabel="Create new Blog" ref={blogAddRef}>
+              <AddBlog
+                title={newBlogTitle}
+                author={newBlogAuthor}
+                url={newBlogUrl}
+                handleAuthor={handleAuthor}
+                handleTitle={handleTitle}
+                handleUrl={handleUrl}
+                addBlog={addBlog}
+              />
+            </Togglabe>
+            {blogs.map((blog) => (
+              <Blog
+                key={blog.id}
+                blog={blog}
+              />
+            ))}
+            </div>}/>
+            <Route path='/blog/:id' element={<OneBlog/>}/>
+            <Route path='/users/:id' element={<User/>}/>
+          </Routes>
 
-      </Router>
+        </Router>
+      </div>
     )
   }
 }
