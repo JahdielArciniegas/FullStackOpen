@@ -33,6 +33,10 @@ const OneBlog = () => {
         <button onClick={addLikes}>like</button>
       </div>
       <p>added by {blog.user.name}</p>
+      <h3>Comments</h3>
+      <ul>
+        {blog.comments.map(c => <li key={c.id}>{c.content}</li>)}
+      </ul>
     </div>
   )
 }
