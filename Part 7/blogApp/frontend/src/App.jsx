@@ -32,7 +32,7 @@ const App = () => {
   const padding = {
     paddingRight: 5,
     textDecoration: 'none',
-    color: '#aaa'
+    color: '#aaa',
   }
 
   useEffect(() => {
@@ -126,7 +126,7 @@ const App = () => {
   }
   if (user === null) {
     return (
-      <>
+      <div className='container'>
         <h3>Log in to application</h3>
         <ShowNotification/>
         <Login
@@ -136,7 +136,7 @@ const App = () => {
           handleUsername={handleUsername}
           handleLogin={handleLogin}
         />
-      </>
+      </div>
     )
   } else {
     return (
@@ -146,14 +146,14 @@ const App = () => {
             <Navbar.Toggle aria-controls="responsive-navbar-nav" />
             <Navbar.Collapse id="responsive-navbar-nav">
               <Nav>
-                <Nav.Link>
+                <Nav.Link href="#" as='span'>
                   <Link to='/' style={padding}>Blogs</Link>
                 </Nav.Link>
-                <Nav.Link>
+                <Nav.Link href="#" as='span'>
                   <Link to='/users' style={padding}>Users</Link>
                 </Nav.Link>
-                <Nav.Link>
-                  <strong>{user.name}</strong> logged in <button onClick={logout}>Logout</button>
+                <Nav.Link href="#" as='span'>
+                  <strong>{user.name}</strong> logged in <Button variant='outline-danger' onClick={logout}>Logout</Button>
                 </Nav.Link>
               </Nav>
             </Navbar.Collapse>

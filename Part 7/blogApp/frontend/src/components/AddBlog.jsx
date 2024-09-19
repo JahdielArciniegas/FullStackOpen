@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Form , Button } from 'react-bootstrap'
 
 const AddBlog = ({
   title,
@@ -13,10 +14,10 @@ const AddBlog = ({
   return (
     <div>
       <h3>Create new</h3>
-      <form onSubmit={addBlog}>
-        <div>
-          <label htmlFor="title">Title : </label>
-          <input
+      <Form onSubmit={addBlog}>
+        <Form.Group>
+          <Form.Label htmlFor="title">Title : </Form.Label>
+          <Form.Control
             type="text"
             id="title"
             name="Title"
@@ -24,10 +25,10 @@ const AddBlog = ({
             value={title}
             onChange={handleTitle}
           />
-        </div>
-        <div>
-          <label htmlFor="author">Author : </label>
-          <input
+        </Form.Group>
+        <Form.Group>
+          <Form.Label htmlFor="author">Author : </Form.Label>
+          <Form.Control
             type="text"
             id="author"
             name="Author"
@@ -35,10 +36,10 @@ const AddBlog = ({
             value={author}
             onChange={handleAuthor}
           />
-        </div>
-        <div>
-          <label htmlFor="url">Url : </label>
-          <input
+        </Form.Group>
+        <Form.Group>
+          <Form.Label htmlFor="url">Url : </Form.Label>
+          <Form.Control
             type="text"
             id="url"
             name="Url"
@@ -46,9 +47,9 @@ const AddBlog = ({
             value={url}
             onChange={handleUrl}
           />
-        </div>
-        <button type="submit">Create</button>
-      </form>
+        </Form.Group>
+        <Button variant='success' type="submit">Create</Button>
+      </Form>
     </div>
   )
 }

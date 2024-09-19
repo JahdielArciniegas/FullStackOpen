@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { addNewComment, addNewLike } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
-import blogService from '../services/blogs'
+import { Button, Form } from 'react-bootstrap'
 
 const OneBlog = () => {
   const id = useParams().id
@@ -32,19 +32,19 @@ const OneBlog = () => {
   }
 
   return (
-    <div>
+    <div className='container'>
       <h2>{blog.name}</h2>
       <p>{blog.url}</p>
       <div>
         <p>{blog.likes} likes</p>
-        <button onClick={addLikes}>like</button>
+        <Button variant='info' onClick={addLikes}>like</Button>
       </div>
       <p>added by {blog.user.name}</p>
       <h3>Comments</h3>
-      <form onSubmit={handleSubmitComment}>
-        <input type="text" placeholder='you comment here!!!' />
-        <button type='submit'>Add Comment</button>
-      </form>
+      <Form onSubmit={handleSubmitComment}>
+        <Form.Control type="text" placeholder='you comment here!!!' />
+        <Button variant='success' type='submit'>Add Comment</Button>
+      </Form>
       <ul>
         {blog.comments.map(c => <li key={c.id}>{c.content}</li>)}
       </ul>

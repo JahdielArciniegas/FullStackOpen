@@ -1,4 +1,5 @@
 import React, { useState, forwardRef, useImperativeHandle } from 'react'
+import Button from 'react-bootstrap/esm/Button'
 import PropTypes from 'prop-types'
 
 const Togglabe = forwardRef(({ children, buttonLabel }, refs) => {
@@ -19,11 +20,11 @@ const Togglabe = forwardRef(({ children, buttonLabel }, refs) => {
   return (
     <div>
       <div style={hideWhenVisible}>
-        <button onClick={toggleVisibility}>{buttonLabel}</button>
+        <Button variant='primary' onClick={toggleVisibility}>{buttonLabel}</Button>
       </div>
       <div style={showWhenVisible}>
         {children}
-        <button onClick={toggleVisibility}>Cancel</button>
+        <Button variant='danger' onClick={toggleVisibility}>Cancel</Button>
       </div>
     </div>
   )

@@ -11,9 +11,13 @@ const Blog = ({ blog }) => {
     marginBottom: 5,
   }
 
+  const linkStyle = {
+    textDecoration : 'none'
+  }
+
   return (
     <div style={blogStyle} className='content-view blog'>
-      <Link to={`/blog/${blog.id}`}><p>{blog.title} - {blog.author}</p></Link>
+      <Link style={linkStyle} to={`/blog/${blog.id}`}><p>{blog.title} - {blog.author}</p></Link>
     </div>
   )
 }
