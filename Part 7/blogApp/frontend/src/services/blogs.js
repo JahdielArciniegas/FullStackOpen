@@ -28,10 +28,15 @@ const update = async (id, newObject) => {
   return response.data
 }
 
-const deleteBlog = async (id) => {
+const deleteBlog = async (id, content) => {
   const request = axios.delete(`${baseUrl}/${id}`)
   const response = await request
   return response.data
 }
 
-export default { getAll, create, update, setToken, deleteBlog }
+const addComment = async(comment) => {
+  const response = await axios.post(`${baseUrl}/${comment.blog}/comments`,comment)
+  return response.data
+}
+
+export default { getAll, create, update, setToken, deleteBlog, addComment }

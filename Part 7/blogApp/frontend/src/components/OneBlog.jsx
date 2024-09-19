@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { addNewLike } from '../reducers/blogReducer'
+import { addNewComment, addNewLike } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
+import blogService from '../services/blogs'
 
 const OneBlog = () => {
   const id = useParams().id
@@ -9,6 +10,12 @@ const OneBlog = () => {
   const blogs = useSelector(state => state.blogs)
   const blog = blogs.find(b => b.id === id)
 
+  const handleSubmitComment = async (e) => {
+    e.preventDefault()
+    const comment = { content : e.target[0].value, blog : blog.id }
+    e.target[0].value = ''
+    dispatch(addNewComment(comment))
+  }
 
 
   const addLikes = async() => {
@@ -34,6 +41,10 @@ const OneBlog = () => {
       </div>
       <p>added by {blog.user.name}</p>
       <h3>Comments</h3>
+      <form onSubmit={handleSubmitComment}>
+        <input type="text" placeholder='you comment here!!!' />
+        <button type='submit'>Add Comment</button>
+      </form>
       <ul>
         {blog.comments.map(c => <li key={c.id}>{c.content}</li>)}
       </ul>
